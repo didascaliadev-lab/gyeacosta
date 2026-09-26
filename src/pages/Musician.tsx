@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Pause, Play } from "lucide-react"
 
@@ -11,8 +11,11 @@ import Button from "../components/ui/Button"
 function Musician() {
   const { t } = useTranslation()
 
-  const [playingId, setPlayingId] = useState<number | null>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isProjectsPlaying, setIsProjectsPlaying] = useState(false)
+  const [hasUserInteracted, setHasUserInteracted] = useState(false)
+
+  const projectsAudioRef = useRef<HTMLAudioElement | null>(null)
+  const fadeIntervalRef = useRef<number | null>(null)
 
   const creativeAreas = [
     {
@@ -45,7 +48,6 @@ function Musician() {
       title: t("musician.projects.items.project1.title"),
       year: "2019",
       image: "/images/musician/comeson.webp",
-      audio: "/audio/comeson.mp3",
     },
     {
       id: 2,
@@ -53,7 +55,6 @@ function Musician() {
       title: t("musician.projects.items.project2.title"),
       year: "2025",
       image: "/images/musician/colaboracion.webp",
-      audio: "/audio/colaboracion.mp3",
     },
     {
       id: 3,
@@ -61,37 +62,169 @@ function Musician() {
       title: t("musician.projects.items.project3.title"),
       year: "2022",
       image: "/images/musician/tlaloques.webp",
-      audio: "/audio/tlaloques.mp3",
     },
   ]
 
-  const handlePlay = (id: number, audio: string) => {
-    if (playingId === id && audioRef.current) {
-      audioRef.current.pause()
-      setPlayingId(null)
-      return
+  const clearFadeInterval = useCallback(() => {
+    if (fadeIntervalRef.current !== null) {
+      window.clearInterval(fadeIntervalRef.current)
+      fadeIntervalRef.current = null
     }
+  }, [])
 
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
+  const fadeIn = useCallback(async () => {
+    const audio = projectsAudioRef.current
+
+    if (!audio) return
+
+    clearFadeInterval()
+
+    try {
+      await audio.play()
+      setIsProjectsPlaying(true)
+
+      const targetVolume = 0.25
+      const step = 0.02
+
+      fadeIntervalRef.current = window.setInterval(() => {
+        const currentAudio = projectsAudioRef.current
+
+        if (!currentAudio) {
+          clearFadeInterval()
+          return
+        }
+
+        const nextVolume = Math.min(
+          currentAudio.volume + step,
+          targetVolume
+        )
+
+        currentAudio.volume = nextVolume
+
+        if (nextVolume >= targetVolume) {
+          clearFadeInterval()
+        }
+      }, 100)
+    } catch {
+      setIsProjectsPlaying(false)
     }
+  }, [clearFadeInterval])
 
-    const newAudio = new Audio(audio)
+  const fadeOut = useCallback(() => {
+    const audio = projectsAudioRef.current
 
-    newAudio.addEventListener("ended", () => {
-      setPlayingId(null)
-      audioRef.current = null
-    })
+    if (!audio || audio.paused) return
 
-    audioRef.current = newAudio
-    setPlayingId(id)
+    clearFadeInterval()
 
-    newAudio.play().catch(() => {
-      setPlayingId(null)
-      audioRef.current = null
-    })
+    const step = 0.02
+
+    fadeIntervalRef.current = window.setInterval(() => {
+      const currentAudio = projectsAudioRef.current
+
+      if (!currentAudio) {
+        clearFadeInterval()
+        return
+      }
+
+      const nextVolume = Math.max(
+        currentAudio.volume - step,
+        0
+      )
+
+      currentAudio.volume = nextVolume
+
+      if (nextVolume <= 0) {
+        currentAudio.pause()
+        clearFadeInterval()
+        setIsProjectsPlaying(false)
+      }
+    }, 80)
+  }, [clearFadeInterval])
+
+  const toggleProjectsAudio = () => {
+    const audio = projectsAudioRef.current
+
+    if (!audio) return
+
+    setHasUserInteracted(true)
+
+    if (audio.paused) {
+      void fadeIn()
+    } else {
+      fadeOut()
+    }
   }
+
+  useEffect(() => {
+    const audio = new Audio(
+      "/musica/proyectosgye.mp3"
+    )
+
+    audio.volume = 0
+    audio.loop = true
+    audio.preload = "auto"
+
+    projectsAudioRef.current = audio
+
+    const registerInteraction = () => {
+      setHasUserInteracted(true)
+    }
+
+    window.addEventListener("pointerdown", registerInteraction, {
+      once: true,
+    })
+
+    window.addEventListener("keydown", registerInteraction, {
+      once: true,
+    })
+
+    return () => {
+      clearFadeInterval()
+
+      audio.pause()
+      audio.src = ""
+
+      projectsAudioRef.current = null
+
+      window.removeEventListener(
+        "pointerdown",
+        registerInteraction
+      )
+
+      window.removeEventListener(
+        "keydown",
+        registerInteraction
+      )
+    }
+  }, [clearFadeInterval])
+
+  useEffect(() => {
+    if (!hasUserInteracted) return
+
+    const section = document.getElementById("projects")
+
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          void fadeIn()
+        } else {
+          fadeOut()
+        }
+      },
+      {
+        threshold: 0.35,
+      }
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [hasUserInteracted, fadeIn, fadeOut])
 
   return (
     <main className="overflow-hidden bg-black">
@@ -199,122 +332,130 @@ function Musician() {
       {/* PROYECTOS */}
       <Section id="projects" className="bg-black">
         <Container>
-          <SectionHeading
-            eyebrow={t("musician.projects.eyebrow")}
-            title={t("musician.projects.title")}
-            description={t("musician.projects.description")}
-          />
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <SectionHeading
+              eyebrow={t("musician.projects.eyebrow")}
+              title={t("musician.projects.title")}
+              description={t("musician.projects.description")}
+            />
+
+            {/* CONTROL GENERAL DE AUDIO */}
+            <button
+              type="button"
+              onClick={toggleProjectsAudio}
+              aria-label={
+                isProjectsPlaying
+                  ? "Pausar música"
+                  : "Reproducir música"
+              }
+              className="
+                group
+                flex w-fit items-center gap-3
+                rounded-full
+                border border-white/10
+                bg-white/5
+                px-4 py-2.5
+                text-sm text-neutral-400
+                backdrop-blur-md
+                transition-all duration-300
+                hover:border-white/30
+                hover:bg-white/10
+                hover:text-white
+                active:scale-95
+              "
+            >
+              <span
+                className={`
+                  flex h-8 w-8
+                  items-center justify-center
+                  rounded-full
+                  transition-all duration-300
+                  ${
+                    isProjectsPlaying
+                      ? "bg-white text-black"
+                      : "bg-white/10 text-white"
+                  }
+                `}
+              >
+                {isProjectsPlaying ? (
+                  <Pause
+                    size={14}
+                    strokeWidth={1.8}
+                    fill="currentColor"
+                  />
+                ) : (
+                  <Play
+                    size={14}
+                    strokeWidth={1.8}
+                    fill="currentColor"
+                    className="ml-0.5"
+                  />
+                )}
+              </span>
+
+              <span>
+                {isProjectsPlaying
+                  ? "Sonando"
+                  : "Escuchar proyectos"}
+              </span>
+
+              {isProjectsPlaying && (
+                <span className="ml-1 flex h-4 items-end gap-[2px]">
+                  <span className="h-2 w-[2px] animate-pulse rounded-full bg-current" />
+                  <span className="h-4 w-[2px] animate-pulse rounded-full bg-current [animation-delay:150ms]" />
+                  <span className="h-3 w-[2px] animate-pulse rounded-full bg-current [animation-delay:300ms]" />
+                  <span className="h-2 w-[2px] animate-pulse rounded-full bg-current [animation-delay:450ms]" />
+                </span>
+              )}
+            </button>
+          </div>
 
           <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {projects.map((project) => {
-              const isPlaying = playingId === project.id
+            {projects.map((project) => (
+              <article
+                key={project.id}
+                className="group"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-neutral-900">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="
+                      h-full w-full object-cover
+                      grayscale
+                      transition-all duration-700
+                      group-hover:scale-[1.03]
+                      group-hover:grayscale-0
+                      group-active:scale-[1.03]
+                      group-active:grayscale-0
+                    "
+                  />
 
-              return (
-                <article
-                  key={project.id}
-                  className="group"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-neutral-900">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className={`
-                        h-full w-full object-cover
-                        transition-all duration-700
-                        group-hover:scale-[1.03]
-                        group-active:scale-[1.03]
-                        ${
-                          isPlaying
-                            ? "scale-[1.03] grayscale-0"
-                            : "grayscale group-hover:grayscale-0 group-active:grayscale-0"
-                        }
-                      `}
-                    />
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute inset-0
+                      bg-black/10
+                      transition-colors duration-500
+                      group-hover:bg-black/0
+                      group-active:bg-black/0
+                    "
+                  />
+                </div>
 
-                    {/* SOMBRA */}
-                    <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-500 group-hover:bg-black/0" />
-
-                    {/* PLAY / PAUSE */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handlePlay(project.id, project.audio)
-                      }
-                      aria-label={
-                        isPlaying
-                          ? `Pausar ${project.title}`
-                          : `Reproducir ${project.title}`
-                      }
-                      className={`
-                        absolute bottom-5 right-5
-                        flex h-14 w-14
-                        items-center justify-center
-                        rounded-full
-                        border
-                        backdrop-blur-md
-                        transition-all duration-300
-                        hover:scale-105
-                        active:scale-95
-                        ${
-                          isPlaying
-                            ? "border-white bg-white text-black"
-                            : "border-white/30 bg-black/40 text-white hover:border-white/60 hover:bg-black/60"
-                        }
-                      `}
-                    >
-                      {isPlaying ? (
-                        <Pause
-                          size={20}
-                          strokeWidth={1.7}
-                          fill="currentColor"
-                        />
-                      ) : (
-                        <Play
-                          size={20}
-                          strokeWidth={1.7}
-                          fill="currentColor"
-                          className="ml-0.5"
-                        />
-                      )}
-                    </button>
-
-                    {/* INDICADOR REPRODUCIENDO */}
-                    {isPlaying && (
-                      <div className="absolute bottom-5 left-5 flex items-end gap-1">
-                        <span className="h-3 w-[2px] animate-pulse rounded-full bg-white" />
-                        <span className="h-5 w-[2px] animate-pulse rounded-full bg-white [animation-delay:150ms]" />
-                        <span className="h-4 w-[2px] animate-pulse rounded-full bg-white [animation-delay:300ms]" />
-                        <span className="h-2 w-[2px] animate-pulse rounded-full bg-white [animation-delay:450ms]" />
-                      </div>
-                    )}
+                <div className="mt-5">
+                  <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-600">
+                    <span>{project.category}</span>
+                    <span>·</span>
+                    <span>{project.year}</span>
                   </div>
 
-                  <div className="mt-5 flex items-start justify-between gap-6">
-                    <div>
-                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-600">
-                        <span>{project.category}</span>
-                        <span>·</span>
-                        <span>{project.year}</span>
-                      </div>
-
-                      <h3
-                        className={`
-                          mt-2 text-xl
-                          transition-colors duration-300
-                          ${
-                            isPlaying
-                              ? "text-white"
-                              : "text-neutral-200"
-                          }
-                        `}
-                      >
-                        {project.title}
-                      </h3>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
+                  <h3 className="mt-2 text-xl text-neutral-200">
+                    {project.title}
+                  </h3>
+                </div>
+              </article>
+            ))}
           </div>
         </Container>
       </Section>
@@ -359,9 +500,13 @@ function Musician() {
               />
 
               <div className="mt-7 space-y-5 text-neutral-400">
-                <p>{t("musician.theatre.paragraph1")}</p>
+                <p>
+                  {t("musician.theatre.paragraph1")}
+                </p>
 
-                <p>{t("musician.theatre.paragraph2")}</p>
+                <p>
+                  {t("musician.theatre.paragraph2")}
+                </p>
               </div>
             </div>
           </div>
@@ -388,7 +533,10 @@ function Musician() {
               </p>
 
               <div className="mt-7">
-                <Button to="/musicoterapia" variant="secondary">
+                <Button
+                  to="/musicoterapia"
+                  variant="secondary"
+                >
                   {t("musician.musicTherapy.button")}
                 </Button>
               </div>
