@@ -1,4 +1,7 @@
+import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Pause, Play } from "lucide-react"
+
 import Hero from "../components/layout/Hero"
 import Container from "../components/layout/Container"
 import Section from "../components/layout/Section"
@@ -7,6 +10,9 @@ import Button from "../components/ui/Button"
 
 function Musician() {
   const { t } = useTranslation()
+
+  const [playingId, setPlayingId] = useState<number | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   const creativeAreas = [
     {
@@ -39,6 +45,7 @@ function Musician() {
       title: t("musician.projects.items.project1.title"),
       year: "2019",
       image: "/images/musician/comeson.webp",
+      audio: "/audio/comeson.mp3",
     },
     {
       id: 2,
@@ -46,6 +53,7 @@ function Musician() {
       title: t("musician.projects.items.project2.title"),
       year: "2025",
       image: "/images/musician/colaboracion.webp",
+      audio: "/audio/colaboracion.mp3",
     },
     {
       id: 3,
@@ -53,13 +61,40 @@ function Musician() {
       title: t("musician.projects.items.project3.title"),
       year: "2022",
       image: "/images/musician/tlaloques.webp",
+      audio: "/audio/tlaloques.mp3",
     },
   ]
 
+  const handlePlay = (id: number, audio: string) => {
+    if (playingId === id && audioRef.current) {
+      audioRef.current.pause()
+      setPlayingId(null)
+      return
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+
+    const newAudio = new Audio(audio)
+
+    newAudio.addEventListener("ended", () => {
+      setPlayingId(null)
+      audioRef.current = null
+    })
+
+    audioRef.current = newAudio
+    setPlayingId(id)
+
+    newAudio.play().catch(() => {
+      setPlayingId(null)
+      audioRef.current = null
+    })
+  }
+
   return (
     <main className="overflow-hidden bg-black">
-
-    
       {/* HERO */}
       <Hero
         eyebrow={t("musician.hero.eyebrow")}
@@ -78,11 +113,11 @@ function Musician() {
           to: "/contacto",
         }}
       />
+
       {/* FORMACIÓN */}
       <Section className="bg-black">
         <Container>
           <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
-
             <div>
               <SectionHeading
                 eyebrow={t("musician.training.eyebrow")}
@@ -97,7 +132,7 @@ function Musician() {
                   {t("musician.training.academic.label")}
                 </span>
 
-                <p className="leading-7 text-neutral-300">
+                <p className="text-neutral-300">
                   {t("musician.training.academic.value")}
                 </p>
               </div>
@@ -107,14 +142,11 @@ function Musician() {
                   {t("musician.training.instruments.label")}
                 </span>
 
-                <p className="leading-7 text-neutral-300">
+                <p className="text-neutral-300">
                   {t("musician.training.instruments.value")}
                 </p>
               </div>
-
-            
             </div>
-
           </div>
         </Container>
       </Section>
@@ -128,7 +160,7 @@ function Musician() {
             description={t("musician.areas.description")}
           />
 
-          <div className="mt-14 grid gap-5 grid-cols-1 md:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
             {creativeAreas.map((area) => (
               <article
                 key={area.number}
@@ -154,7 +186,7 @@ function Musician() {
                     {area.title}
                   </h3>
 
-                  <p className="mt-4 leading-7 text-neutral-400">
+                  <p className="mt-4 text-neutral-400">
                     {area.description}
                   </p>
                 </div>
@@ -173,43 +205,116 @@ function Musician() {
             description={t("musician.projects.description")}
           />
 
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          {projects.map((project) => (
-            <article
-              key={project.id}
-              className="group"
-            >
-              <div className="aspect-[4/3] overflow-hidden rounded-[2rem] bg-neutral-900">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="
-                    h-full w-full object-cover
-                    grayscale
-                    transition-all duration-700
-                    group-hover:scale-[1.03]
-                    group-hover:grayscale-0
-                  "
-                />
-              </div>
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {projects.map((project) => {
+              const isPlaying = playingId === project.id
 
-                <div className="mt-5 flex items-start justify-between gap-6">
-                  <div>
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-600">
-                      <span>{project.category}</span>
-                      <span>·</span>
-                      <span>{project.year}</span>
-                    </div>
+              return (
+                <article
+                  key={project.id}
+                  className="group"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-neutral-900">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className={`
+                        h-full w-full object-cover
+                        transition-all duration-700
+                        group-hover:scale-[1.03]
+                        group-active:scale-[1.03]
+                        ${
+                          isPlaying
+                            ? "scale-[1.03] grayscale-0"
+                            : "grayscale group-hover:grayscale-0 group-active:grayscale-0"
+                        }
+                      `}
+                    />
 
-                    <h3 className="mt-2 text-xl text-neutral-200">
-                      {project.title}
-                    </h3>
+                    {/* SOMBRA */}
+                    <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-500 group-hover:bg-black/0" />
+
+                    {/* PLAY / PAUSE */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handlePlay(project.id, project.audio)
+                      }
+                      aria-label={
+                        isPlaying
+                          ? `Pausar ${project.title}`
+                          : `Reproducir ${project.title}`
+                      }
+                      className={`
+                        absolute bottom-5 right-5
+                        flex h-14 w-14
+                        items-center justify-center
+                        rounded-full
+                        border
+                        backdrop-blur-md
+                        transition-all duration-300
+                        hover:scale-105
+                        active:scale-95
+                        ${
+                          isPlaying
+                            ? "border-white bg-white text-black"
+                            : "border-white/30 bg-black/40 text-white hover:border-white/60 hover:bg-black/60"
+                        }
+                      `}
+                    >
+                      {isPlaying ? (
+                        <Pause
+                          size={20}
+                          strokeWidth={1.7}
+                          fill="currentColor"
+                        />
+                      ) : (
+                        <Play
+                          size={20}
+                          strokeWidth={1.7}
+                          fill="currentColor"
+                          className="ml-0.5"
+                        />
+                      )}
+                    </button>
+
+                    {/* INDICADOR REPRODUCIENDO */}
+                    {isPlaying && (
+                      <div className="absolute bottom-5 left-5 flex items-end gap-1">
+                        <span className="h-3 w-[2px] animate-pulse rounded-full bg-white" />
+                        <span className="h-5 w-[2px] animate-pulse rounded-full bg-white [animation-delay:150ms]" />
+                        <span className="h-4 w-[2px] animate-pulse rounded-full bg-white [animation-delay:300ms]" />
+                        <span className="h-2 w-[2px] animate-pulse rounded-full bg-white [animation-delay:450ms]" />
+                      </div>
+                    )}
                   </div>
 
-                  
-                </div>
-              </article>
-            ))}
+                  <div className="mt-5 flex items-start justify-between gap-6">
+                    <div>
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-neutral-600">
+                        <span>{project.category}</span>
+                        <span>·</span>
+                        <span>{project.year}</span>
+                      </div>
+
+                      <h3
+                        className={`
+                          mt-2 text-xl
+                          transition-colors duration-300
+                          ${
+                            isPlaying
+                              ? "text-white"
+                              : "text-neutral-200"
+                          }
+                        `}
+                      >
+                        {project.title}
+                      </h3>
+                    </div>
+                  </div>
+                </article>
+              )
+            })}
           </div>
         </Container>
       </Section>
@@ -226,7 +331,7 @@ function Musician() {
               “{t("musician.collaborations.quote")}”
             </blockquote>
 
-            <p className="mx-auto mt-8 max-w-2xl leading-7 text-neutral-400">
+            <p className="mx-auto mt-8 max-w-2xl text-neutral-400">
               {t("musician.collaborations.description")}
             </p>
           </div>
@@ -237,7 +342,6 @@ function Musician() {
       <Section className="bg-black">
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
               <img
                 src="/images/musician/teatro.webp"
@@ -254,13 +358,12 @@ function Musician() {
                 title={t("musician.theatre.title")}
               />
 
-              <div className="mt-7 space-y-5 text-base leading-8 text-neutral-400">
+              <div className="mt-7 space-y-5 text-neutral-400">
                 <p>{t("musician.theatre.paragraph1")}</p>
 
                 <p>{t("musician.theatre.paragraph2")}</p>
               </div>
             </div>
-
           </div>
         </Container>
       </Section>
@@ -269,7 +372,6 @@ function Musician() {
       <Section className="bg-neutral-950">
         <Container>
           <div className="grid gap-10 border-y border-white/10 py-14 md:grid-cols-[1fr_1.2fr] md:items-end md:py-20">
-
             <div>
               <span className="text-xs uppercase tracking-[0.35em] text-teal-500">
                 {t("musician.musicTherapy.eyebrow")}
@@ -281,7 +383,7 @@ function Musician() {
             </div>
 
             <div>
-              <p className="max-w-xl leading-8 text-neutral-400">
+              <p className="max-w-xl text-neutral-400">
                 {t("musician.musicTherapy.description")}
               </p>
 
@@ -291,7 +393,6 @@ function Musician() {
                 </Button>
               </div>
             </div>
-
           </div>
         </Container>
       </Section>
@@ -311,9 +412,9 @@ function Musician() {
                 "url('/images/musician/contacto.webp')",
             }}
           >
-            <div className="absolute inset-0 bg-black/55" />
+            <div className="absolute inset-0 bg-black/20" />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/60 to-black/20" />
 
             <div className="relative z-10 flex min-h-[500px] max-w-3xl flex-col justify-center px-8 py-16 md:px-14 lg:px-16">
               <span className="text-xs uppercase tracking-[0.35em] text-red-500">
@@ -324,12 +425,12 @@ function Musician() {
                 {t("musician.cta.title")}
               </h2>
 
-              <p className="mt-6 max-w-xl leading-8 text-neutral-400">
+              <p className="mt-6 max-w-xl text-neutral-400">
                 {t("musician.cta.description")}
               </p>
 
               <div className="mt-8">
-                <Button to="/contact">
+                <Button to="/contacto">
                   {t("musician.cta.button")}
                 </Button>
               </div>
@@ -337,7 +438,6 @@ function Musician() {
           </div>
         </Container>
       </Section>
-
     </main>
   )
 }

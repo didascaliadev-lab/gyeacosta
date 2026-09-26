@@ -1,6 +1,13 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import {ArrowUpRight, Mail, Music2, HeartHandshake, Hammer,} from "lucide-react"
+import {
+  ArrowUpRight,
+  Mail,
+  Music2,
+  HeartHandshake,
+  Hammer,
+} from "lucide-react"
+
 import Hero from "../components/layout/Hero"
 import Container from "../components/layout/Container"
 import Section from "../components/layout/Section"
@@ -14,37 +21,35 @@ function Contacto() {
       id: "music",
       icon: Music2,
       label: t("contact.interests.music"),
-      active:
-        "border-red-700 bg-red-950/20 text-red-400",
+      active: "border-red-700 bg-red-950/20 text-red-400",
     },
     {
       id: "musicTherapy",
       icon: HeartHandshake,
       label: t("contact.interests.musicTherapy"),
-      active:
-        "border-teal-700 bg-teal-950/20 text-teal-400",
+      active: "border-teal-700 bg-teal-950/20 text-teal-400",
     },
     {
       id: "lutherie",
       icon: Hammer,
       label: t("contact.interests.lutherie"),
-      active:
-        "border-amber-700 bg-amber-950/20 text-amber-400",
+      active: "border-amber-700 bg-amber-950/20 text-amber-400",
     },
   ]
 
   return (
     <main className="overflow-hidden bg-black">
-
+      {/* HERO */}
       <Hero
-          eyebrow={t("contact.hero.eyebrow")}
-          title={t("contact.hero.title")}
-          description={t("contact.hero.description")}
-          image="/images/contacto/hero.webp"
-          mobileImage="/images/contacto/herocel.webp"
-          accent="teal"
-          imagePosition="center"
-        />    
+        eyebrow={t("contact.hero.eyebrow")}
+        title={t("contact.hero.title")}
+        description={t("contact.hero.description")}
+        image="/images/contacto/hero.webp"
+        mobileImage="/images/contacto/herocel.webp"
+        accent="teal"
+        imagePosition="center"
+      />
+
       {/* CONTACTO */}
       <Section className="bg-neutral-950">
         <Container>
@@ -55,7 +60,6 @@ function Contacto() {
               lg:gap-24
             "
           >
-
             {/* INFORMACIÓN */}
             <div>
               <span
@@ -80,19 +84,13 @@ function Contacto() {
                 {t("contact.info.title")}
               </h2>
 
-              <p
-                className="
-                  mt-6 max-w-md
-                  leading-7
-                  text-neutral-400
-                "
-              >
+              <p className="mt-6 max-w-md text-neutral-400">
                 {t("contact.info.description")}
               </p>
 
               {/* EMAIL */}
               <a
-                href="mailto:correo@ejemplo.com"
+                href="mailto:gyeacosta@gmail.com"
                 className="
                   group
                   mt-10
@@ -149,7 +147,6 @@ function Contacto() {
 
             {/* FORMULARIO */}
             <form className="space-y-8">
-
               {/* NOMBRE + EMAIL */}
               <div className="grid gap-8 sm:grid-cols-2">
                 <div>
@@ -291,7 +288,6 @@ function Contacto() {
                     border-0 border-b border-white/15
                     bg-transparent
                     px-0 py-3
-                    leading-7
                     text-neutral-100
                     outline-none
                     transition-colors duration-300

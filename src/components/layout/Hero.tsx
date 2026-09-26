@@ -8,7 +8,6 @@ type HeroProps = {
   image: string
   mobileImage?: string
   accent?: "red" | "teal" | "amber" | "neutral"
-
   imagePosition?: string
 
   primaryButton?: {
@@ -46,7 +45,7 @@ function Hero({
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-black">
       {/* IMAGEN DE FONDO */}
-        <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
         <picture className="absolute inset-0 block h-full w-full">
           {mobileImage && (
             <source
@@ -64,7 +63,7 @@ function Hero({
         </picture>
 
         {/* OSCURECIDO GENERAL */}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/10" />
 
         {/* GRADIENTE PARA DAR LEGIBILIDAD AL TEXTO */}
         <div
@@ -100,6 +99,7 @@ function Hero({
         "
       >
         <div className="max-w-2xl">
+          {/* EYEBROW */}
           {eyebrow && (
             <span
               className={`
@@ -113,6 +113,7 @@ function Hero({
             </span>
           )}
 
+          {/* TÍTULO */}
           <h1
             className="
               mt-6
@@ -125,15 +126,9 @@ function Hero({
             {title}
           </h1>
 
+          {/* DESCRIPCIÓN */}
           {description && (
-            <p
-              className="
-                mt-7 max-w-xl
-                text-base leading-7
-                text-neutral-400
-                md:text-lg md:leading-8
-              "
-            >
+            <p className="mt-7 max-w-xl text-neutral-300">
               {description}
             </p>
           )}

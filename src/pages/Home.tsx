@@ -48,7 +48,7 @@ function Home() {
                 {t("home.activities.musician.title")}
               </h3>
 
-              <p className="mt-4 max-w-lg leading-relaxed text-neutral-400">
+              <p className="mt-4 max-w-lg text-neutral-400">
                 {t("home.activities.musician.description")}
               </p>
 
@@ -69,7 +69,7 @@ function Home() {
                 {t("home.activities.musicTherapy.title")}
               </h3>
 
-              <p className="mt-4 max-w-lg leading-relaxed text-neutral-400">
+              <p className="mt-4 max-w-lg text-neutral-400">
                 {t("home.activities.musicTherapy.description")}
               </p>
 
@@ -90,7 +90,7 @@ function Home() {
                 {t("home.activities.lutherie.title")}
               </h3>
 
-              <p className="mt-4 max-w-lg leading-relaxed text-neutral-400">
+              <p className="mt-4 max-w-lg text-neutral-400">
                 {t("home.activities.lutherie.description")}
               </p>
 

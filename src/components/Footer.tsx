@@ -8,9 +8,7 @@ function Footer() {
   return (
     <footer className="border-t border-white/5 bg-black">
       <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">
-
         <div className="grid gap-12 text-center md:grid-cols-2 md:text-left lg:grid-cols-[1.4fr_0.8fr_0.8fr]">
-
           {/* LOGO + DESCRIPCIÓN */}
           <div className="mx-auto flex max-w-md flex-col items-center md:mx-0 md:items-start">
             <Link
@@ -25,7 +23,7 @@ function Footer() {
               />
             </Link>
 
-            <p className="mt-6 max-w-sm text-sm leading-7 text-neutral-400">
+            <p className="mt-6 max-w-sm text-neutral-400">
               {t("footer.description")}
             </p>
           </div>
@@ -73,7 +71,7 @@ function Footer() {
               {t("footer.contact")}
             </p>
 
-            <p className="max-w-xs text-sm leading-6 text-neutral-400">
+            <p className="max-w-xs text-neutral-400">
               {t("footer.contactText")}
             </p>
 
@@ -95,36 +93,40 @@ function Footer() {
           </div>
         </div>
 
-                  
-          <div className="mt-14 border-t border-white/5 pt-6">
-            <div
-              className="
-                flex flex-col items-center gap-3
-                text-center text-xs text-neutral-600
-                md:flex-row md:justify-between md:text-left
-              "
-            >
-              <p>© {currentYear} Gye Acosta</p>
+        {/* PARTE INFERIOR */}
+        <div className="mt-14 border-t border-white/5 pt-6">
+          <div
+            className="
+              flex flex-col items-center gap-3
+              text-center text-xs text-neutral-600
+              md:flex-row md:justify-between md:text-left
+            "
+          >
+            <p className="text-sm">
+              © {currentYear} Gye Acosta
+            </p>
 
-              <p>{t("footer.disciplines")}</p>
+            <p className="text-sm">
+              {t("footer.disciplines")}
+            </p>
 
-              <p>
-                {t("footer.createdBy")}{" "}
-                <a
-                  href="https://didascaliadev.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="
-                    text-neutral-400
-                    transition-colors duration-300
-                    hover:text-white
-                  "
-                >
-                  DidascaliaDev
-                </a>
-              </p>
-            </div>
+            <p className="text-sm">
+              {t("footer.createdBy")}{" "}
+              <a
+                href="https://didascaliadev.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  text-neutral-400
+                  transition-colors duration-300
+                  hover:text-white
+                "
+              >
+                DidascaliaDev
+              </a>
+            </p>
           </div>
+        </div>
       </div>
     </footer>
   )

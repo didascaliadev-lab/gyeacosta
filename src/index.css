@@ -56,3 +56,9 @@ img {
   display: block;
   max-width: 100%;
 }
+
+@layer base {
+  p {
+    @apply text-[17px] leading-7 md:text-lg md:leading-8;
+  }
+}

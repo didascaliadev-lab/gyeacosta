@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next"
-import {HeartHandshake, Music2, MessagesSquare,} from "lucide-react"
+import {
+  HeartHandshake,
+  Music2,
+  MessagesSquare,
+} from "lucide-react"
+
 import Container from "../components/layout/Container"
 import Hero from "../components/layout/Hero"
 import Section from "../components/layout/Section"
@@ -32,8 +37,8 @@ function Musicoterapia() {
 
   return (
     <main className="overflow-hidden bg-black">
-
-          <Hero
+      {/* HERO */}
+      <Hero
         eyebrow={t("musicTherapy.hero.eyebrow")}
         title={t("musicTherapy.hero.title")}
         description={t("musicTherapy.hero.description")}
@@ -68,7 +73,7 @@ function Musicoterapia() {
               />
             </div>
 
-            <div className="space-y-5 text-base leading-8 text-neutral-400">
+            <div className="space-y-5 text-neutral-400">
               <p>{t("musicTherapy.about.paragraph1")}</p>
 
               <p>{t("musicTherapy.about.paragraph2")}</p>
@@ -126,7 +131,7 @@ function Musicoterapia() {
                       {item.title}
                     </h3>
 
-                    <p className="mt-4 leading-7 text-neutral-400">
+                    <p className="mt-4 text-neutral-400">
                       {item.description}
                     </p>
                   </div>
@@ -186,7 +191,7 @@ function Musicoterapia() {
                 title={t("musicTherapy.experience.title")}
               />
 
-              <div className="mt-7 space-y-5 text-base leading-8 text-neutral-400">
+              <div className="mt-7 space-y-5 text-neutral-400">
                 <p>{t("musicTherapy.experience.paragraph1")}</p>
 
                 <p>{t("musicTherapy.experience.paragraph2")}</p>
@@ -213,40 +218,42 @@ function Musicoterapia() {
             />
 
             <div className="border-t border-white/10">
-              {["individual", "groups", "workshops"].map((item, index) => (
-                <div
-                  key={item}
-                  className="
-                    group
-                    grid gap-4
-                    border-b border-white/10
-                    py-7
-                    sm:grid-cols-[70px_1fr_auto]
-                    sm:items-center
-                  "
-                >
-                  <span className="text-xs tracking-[0.2em] text-teal-600">
-                    0{index + 1}
-                  </span>
+              {["individual", "groups", "workshops"].map(
+                (item, index) => (
+                  <div
+                    key={item}
+                    className="
+                      group
+                      grid gap-4
+                      border-b border-white/10
+                      py-7
+                      sm:grid-cols-[70px_1fr_auto]
+                      sm:items-center
+                    "
+                  >
+                    <span className="text-xs tracking-[0.2em] text-teal-600">
+                      0{index + 1}
+                    </span>
 
-                  <div>
-                    <h3 className="text-xl text-neutral-200">
-                      {t(`musicTherapy.forWho.${item}.title`)}
-                    </h3>
+                    <div>
+                      <h3 className="text-xl text-neutral-200">
+                        {t(`musicTherapy.forWho.${item}.title`)}
+                      </h3>
 
-                    <p className="mt-2 max-w-lg leading-7 text-neutral-500">
-                      {t(`musicTherapy.forWho.${item}.description`)}
-                    </p>
+                      <p className="mt-2 max-w-lg text-neutral-500">
+                        {t(
+                          `musicTherapy.forWho.${item}.description`,
+                        )}
+                      </p>
+                    </div>
                   </div>
-
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </Container>
       </Section>
 
-    
       {/* FRASE */}
       <Section className="border-y border-white/5 bg-neutral-950">
         <Container>
@@ -267,7 +274,7 @@ function Musicoterapia() {
               “{t("musicTherapy.quote.text")}”
             </blockquote>
 
-            <p className="mx-auto mt-8 max-w-2xl leading-7 text-neutral-500">
+            <p className="mx-auto mt-8 max-w-2xl text-neutral-500">
               {t("musicTherapy.quote.description")}
             </p>
           </div>
@@ -291,7 +298,7 @@ function Musicoterapia() {
                 "url('/images/musicoterapia/contacto.webp')",
             }}
           >
-            <div className="absolute inset-0 bg-black/55" />
+            <div className="absolute inset-0 bg-black/35" />
 
             <div
               className="
@@ -330,12 +337,12 @@ function Musicoterapia() {
                 {t("musicTherapy.cta.title")}
               </h2>
 
-              <p className="mt-6 max-w-xl leading-8 text-neutral-400">
+              <p className="mt-6 max-w-xl text-neutral-400">
                 {t("musicTherapy.cta.description")}
               </p>
 
               <div className="mt-8">
-                <Button to="/contact">
+                <Button to="/contacto">
                   {t("musicTherapy.cta.button")}
                 </Button>
               </div>

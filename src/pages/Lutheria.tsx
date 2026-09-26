@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next"
-import {Hammer, Ruler, TreePine, Waves,} from "lucide-react"
+import { Hammer, Ruler, TreePine, Waves } from "lucide-react"
+
 import Container from "../components/layout/Container"
 import Section from "../components/layout/Section"
 import SectionHeading from "../components/layout/SectionHeading"
@@ -28,24 +29,23 @@ function Lutherie() {
       description: t("lutherie.instruments.leona.description"),
       image: "/images/lauderia/leona.webp",
     },
-        {
+    {
       number: "04",
       title: t("lutherie.instruments.ukulele.title"),
       description: t("lutherie.instruments.ukulele.description"),
       image: "/images/lauderia/ukulele.webp",
     },
-        {
+    {
       number: "05",
       title: t("lutherie.instruments.mosquito.title"),
       description: t("lutherie.instruments.mosquito.description"),
       image: "/images/lauderia/mosquito.webp",
     },
-        {
+    {
       number: "06",
       title: t("lutherie.instruments.Reparaciones.title"),
       description: t("lutherie.instruments.Reparaciones.description"),
       image: "/images/lauderia/reparacion.webp",
-      
     },
   ]
 
@@ -78,8 +78,8 @@ function Lutherie() {
 
   return (
     <main className="overflow-hidden bg-black">
-
-     <Hero
+      {/* HERO */}
+      <Hero
         eyebrow={t("lutherie.hero.eyebrow")}
         title={t("lutherie.hero.title")}
         description={t("lutherie.hero.description")}
@@ -114,7 +114,7 @@ function Lutherie() {
               />
             </div>
 
-            <div className="space-y-5 text-base leading-8 text-neutral-400">
+            <div className="space-y-5 text-neutral-400">
               <p>{t("lutherie.craft.paragraph1")}</p>
               <p>{t("lutherie.craft.paragraph2")}</p>
             </div>
@@ -131,7 +131,8 @@ function Lutherie() {
             description={t("lutherie.instruments.description")}
           />
 
-          <div className="mt-14 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6"> {instruments.map((instrument) => (
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+            {instruments.map((instrument) => (
               <article
                 key={instrument.number}
                 className="
@@ -185,12 +186,10 @@ function Lutherie() {
                         {instrument.title}
                       </h3>
 
-                      <p className="mt-4 leading-7 text-neutral-400">
+                      <p className="mt-4 text-neutral-400">
                         {instrument.description}
                       </p>
                     </div>
-
-                   
                   </div>
                 </div>
               </article>
@@ -254,7 +253,7 @@ function Lutherie() {
                         {step.title}
                       </h3>
 
-                      <p className="mt-4 leading-7 text-neutral-500">
+                      <p className="mt-4 text-neutral-500">
                         {step.description}
                       </p>
                     </div>
@@ -313,7 +312,7 @@ function Lutherie() {
                 title={t("lutherie.workshop.title")}
               />
 
-              <div className="mt-7 space-y-5 text-base leading-8 text-neutral-400">
+              <div className="mt-7 space-y-5 text-neutral-400">
                 <p>{t("lutherie.workshop.paragraph1")}</p>
                 <p>{t("lutherie.workshop.paragraph2")}</p>
               </div>
@@ -344,14 +343,14 @@ function Lutherie() {
               "
             />
 
-            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 bg-black/20" />
 
             <div
               className="
                 absolute inset-0
                 bg-gradient-to-r
-                from-black/95
-                via-black/75
+                from-black/80
+                via-black/70
                 to-black/20
               "
             />
@@ -393,7 +392,6 @@ function Lutherie() {
                 className="
                   mt-7 max-w-xl
                   space-y-5
-                  leading-8
                   text-neutral-300
                 "
               >
@@ -442,7 +440,7 @@ function Lutherie() {
             </div>
 
             <div>
-              <p className="max-w-xl leading-8 text-neutral-400">
+              <p className="max-w-xl text-neutral-400">
                 {t("lutherie.care.description")}
               </p>
 
@@ -473,13 +471,13 @@ function Lutherie() {
                 "url('/images/lauderia/contacto.webp')",
             }}
           >
-            <div className="absolute inset-0 bg-black/55" />
+            <div className="absolute inset-0 bg-black/20" />
 
             <div
               className="
                 absolute inset-0
                 bg-gradient-to-r
-                from-black/95
+                from-black/75
                 via-black/70
                 to-black/20
               "
@@ -518,7 +516,7 @@ function Lutherie() {
                 {t("lutherie.cta.title")}
               </h2>
 
-              <p className="mt-6 max-w-xl leading-8 text-neutral-400">
+              <p className="mt-6 max-w-xl text-neutral-400">
                 {t("lutherie.cta.description")}
               </p>
 

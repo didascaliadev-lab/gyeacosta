@@ -29,7 +29,7 @@ function SectionHeading({
       </h2>
 
       {description && (
-        <p className="text-base leading-relaxed text-[#aaa89f] md:text-lg">
+        <p className="text-[#aaa89f]">
           {description}
         </p>
       )}

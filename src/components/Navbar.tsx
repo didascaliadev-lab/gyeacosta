@@ -10,14 +10,14 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `relative py-2 text-sm transition-colors duration-300 ${
+    `relative py-2 text-base transition-colors duration-300 ${
       isActive
         ? "text-white"
         : "text-neutral-400 hover:text-white"
     }`
 
   const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `block rounded-xl px-4 py-3 text-sm transition-all duration-300 ${
+    `block rounded-xl px-4 py-3 text-base transition-all duration-300 ${
       isActive
         ? "bg-white/10 text-white"
         : "text-neutral-400 hover:bg-white/5 hover:text-white"
