@@ -23,6 +23,7 @@ const en = {
 
       disciplines:
         "Music · Music Therapy · Lutherie",
+      createdBy: "Made by",
     },
     home: {
       hero: {

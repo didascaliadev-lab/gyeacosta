@@ -41,6 +41,7 @@ function Contacto() {
           title={t("contact.hero.title")}
           description={t("contact.hero.description")}
           image="/images/contacto/hero.webp"
+          mobileImage="/images/contacto/herocel.webp"
           accent="teal"
           imagePosition="center"
         />    

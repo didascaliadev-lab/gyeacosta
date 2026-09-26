@@ -39,6 +39,16 @@ function Button({
     ${styles}
   `
 
+  
+  if (to?.startsWith("#")) {
+    return (
+      <a href={to} className={className}>
+        {children}
+      </a>
+    )
+  }
+
+ 
   if (to) {
     return (
       <Link to={to} className={className}>

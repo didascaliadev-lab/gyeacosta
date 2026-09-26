@@ -38,6 +38,7 @@ function Musicoterapia() {
         title={t("musicTherapy.hero.title")}
         description={t("musicTherapy.hero.description")}
         image="/images/musicoterapia/hero.webp"
+        mobileImage="/images/musicoterapia/herocel.webp"
         accent="teal"
         imagePosition="center"
         primaryButton={{
@@ -46,7 +47,7 @@ function Musicoterapia() {
         }}
         secondaryButton={{
           label: t("musicTherapy.hero.contactButton"),
-          to: "/contact",
+          to: "/contacto",
         }}
       />
 

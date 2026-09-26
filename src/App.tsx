@@ -6,11 +6,14 @@ import Musicoterapia  from "./pages/Musicoterapia"
 import Lutherie from "./pages/Lutheria"
 import Musician from "./pages/Musician"
 import Contacto from "./pages/Contacto"
+import ScrollToTop from "./components/scrollToTop"
 
 function App() {
   return (
     <>
       <Navbar />
+
+      <ScrollToTop />
 
       <Routes>
         <Route path="/" element={<Home />} />

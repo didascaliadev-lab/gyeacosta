@@ -66,6 +66,7 @@ function Musician() {
         title={t("musician.hero.title")}
         description={t("musician.hero.description")}
         image="/images/musician/gyeacosta1.png"
+        mobileImage="/images/musician/herocel.webp"
         accent="red"
         imagePosition="center"
         primaryButton={{
@@ -285,7 +286,7 @@ function Musician() {
               </p>
 
               <div className="mt-7">
-                <Button to="/music-therapy" variant="secondary">
+                <Button to="/musicoterapia" variant="secondary">
                   {t("musician.musicTherapy.button")}
                 </Button>
               </div>

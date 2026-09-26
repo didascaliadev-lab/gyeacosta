@@ -95,20 +95,36 @@ function Footer() {
           </div>
         </div>
 
-        {/* PARTE INFERIOR */}
-        <div className="mt-14 border-t border-white/5 pt-6">
-          <div
-            className="
-              flex flex-col items-center gap-3
-              text-center text-xs text-neutral-600
-              sm:flex-row sm:justify-between sm:text-left
-            "
-          >
-            <p>© {currentYear} Gye Acosta</p>
+                  
+          <div className="mt-14 border-t border-white/5 pt-6">
+            <div
+              className="
+                flex flex-col items-center gap-3
+                text-center text-xs text-neutral-600
+                md:flex-row md:justify-between md:text-left
+              "
+            >
+              <p>© {currentYear} Gye Acosta</p>
 
-            <p>{t("footer.disciplines")}</p>
+              <p>{t("footer.disciplines")}</p>
+
+              <p>
+                {t("footer.createdBy")}{" "}
+                <a
+                  href="https://didascaliadev.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    text-neutral-400
+                    transition-colors duration-300
+                    hover:text-white
+                  "
+                >
+                  DidascaliaDev
+                </a>
+              </p>
+            </div>
           </div>
-        </div>
       </div>
     </footer>
   )

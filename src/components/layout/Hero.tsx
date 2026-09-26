@@ -6,7 +6,7 @@ type HeroProps = {
   title: string
   description?: string
   image: string
-
+  mobileImage?: string
   accent?: "red" | "teal" | "amber" | "neutral"
 
   imagePosition?: string
@@ -29,6 +29,7 @@ function Hero({
   title,
   description,
   image,
+  mobileImage,
   accent = "neutral",
   imagePosition = "center",
   primaryButton,
@@ -45,16 +46,25 @@ function Hero({
   return (
     <section className="relative min-h-[90vh] overflow-hidden bg-black">
       {/* IMAGEN DE FONDO */}
-      <div className="absolute inset-0">
-        <img
-          src={image}
-          alt=""
-          className="h-full w-full object-cover"
-          style={{ objectPosition: imagePosition }}
-        />
+        <div className="absolute inset-0 overflow-hidden">
+        <picture className="absolute inset-0 block h-full w-full">
+          {mobileImage && (
+            <source
+              media="(max-width: 767px)"
+              srcSet={mobileImage}
+            />
+          )}
+
+          <img
+            src={image}
+            alt=""
+            className="h-full w-full object-cover"
+            style={{ objectPosition: imagePosition }}
+          />
+        </picture>
 
         {/* OSCURECIDO GENERAL */}
-        <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-0 bg-black/30" />
 
         {/* GRADIENTE PARA DAR LEGIBILIDAD AL TEXTO */}
         <div
@@ -62,8 +72,8 @@ function Hero({
             absolute inset-0
             bg-gradient-to-r
             from-black
-            via-black/80
-            to-black/15
+            via-black/60
+            to-black/20
           "
         />
 
@@ -74,7 +84,7 @@ function Hero({
             bg-gradient-to-t
             from-black
             via-transparent
-            to-black/35
+            to-black/25
           "
         />
       </div>

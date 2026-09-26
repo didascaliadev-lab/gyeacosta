@@ -17,6 +17,7 @@ function Home() {
         title={t("home.hero.title")}
         description={t("home.hero.description")}
         image="/images/home/hero.webp"
+        mobileImage="/images/home/herocel.webp"
       >
         <Button to="/musicoterapia">
           {t("home.hero.musicoterapia")}

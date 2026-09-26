@@ -23,6 +23,8 @@ const es = {
 
       disciplines:
         "Música · Musicoterapia · Laudería",
+      
+      createdBy: "Realizado por",
     },
 
     home: {

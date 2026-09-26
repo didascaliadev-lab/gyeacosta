@@ -45,6 +45,7 @@ function Lutherie() {
       title: t("lutherie.instruments.Reparaciones.title"),
       description: t("lutherie.instruments.Reparaciones.description"),
       image: "/images/lauderia/reparacion.webp",
+      
     },
   ]
 
@@ -83,6 +84,7 @@ function Lutherie() {
         title={t("lutherie.hero.title")}
         description={t("lutherie.hero.description")}
         image="/images/lauderia/hero.webp"
+        mobileImage="/images/lauderia/herocel.webp"
         accent="amber"
         imagePosition="center"
         primaryButton={{
@@ -445,7 +447,7 @@ function Lutherie() {
               </p>
 
               <div className="mt-7">
-                <Button to="/contact" variant="secondary">
+                <Button to="/contacto" variant="secondary">
                   {t("lutherie.care.button")}
                 </Button>
               </div>
@@ -521,7 +523,7 @@ function Lutherie() {
               </p>
 
               <div className="mt-8">
-                <Button to="/contact">
+                <Button to="/contacto">
                   {t("lutherie.cta.button")}
                 </Button>
               </div>
